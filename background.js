@@ -1,7 +1,4 @@
-// You must not hardcode API keys here. Instead, ask user to enter their key in options page, or use a proxy.
-// This example uses OpenAI, but you must tell the user to set their own key via an options page.
-
-let API_KEY = ''; // will be loaded from storage
+let API_KEY = '';
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.get(['openai_api_key'], (result) => {
@@ -19,7 +16,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 async function handleSummarize(content, url) {
-  // Optional: check cache in chrome.storage.local
   const cacheKey = `summary_${url}`;
   const cached = await chrome.storage.local.get(cacheKey);
   if (cached[cacheKey]) {
@@ -27,7 +23,6 @@ async function handleSummarize(content, url) {
   }
 
   if (!API_KEY) {
-    // Fallback: ask user to set key via options page
     throw new Error('OpenAI API key not set. Please set it in extension options.');
   }
 
@@ -36,7 +31,7 @@ async function handleSummarize(content, url) {
 - Key insights: ...
 - Estimated reading time: X min
 
-Content: ${content.substring(0, 8000)}`; // limit tokens
+Content: ${content.substring(0, 8000)}`;
 
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -60,7 +55,6 @@ Content: ${content.substring(0, 8000)}`; // limit tokens
   const data = await response.json();
   const summary = data.choices[0].message.content;
 
-  // Cache summary
   await chrome.storage.local.set({ [cacheKey]: summary });
   return summary;
 }
