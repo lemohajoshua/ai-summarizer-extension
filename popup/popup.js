@@ -1,9 +1,31 @@
 let currentTabUrl = '';
 
 document.addEventListener('DOMContentLoaded', async () => {
+  chrome.storage.sync.get(['openai_api_key'], (result) => {
+    if (result.openai_api_key) {
+      document.getElementById('apiKeyInput').value = result.openai_api_key;
+      document.getElementById('keyStatus').innerText = '✓ API key saved';
+    }
+  });
+
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   currentTabUrl = tab.url;
   document.getElementById('pageTitle').innerText = tab.title || 'Untitled Page';
+
+  document.getElementById('saveKeyBtn').addEventListener('click', () => {
+    const key = document.getElementById('apiKeyInput').value.trim();
+    if (key) {
+      chrome.storage.sync.set({ openai_api_key: key }, () => {
+        document.getElementById('keyStatus').innerText = '✓ API key saved!';
+        setTimeout(() => {
+          if (document.getElementById('keyStatus').innerText === '✓ API key saved!')
+            document.getElementById('keyStatus').innerText = '';
+        }, 2000);
+      });
+    } else {
+      document.getElementById('keyStatus').innerText = '❌ Please enter a key';
+    }
+  });
 
   document.getElementById('summarizeBtn').addEventListener('click', async () => {
     const summaryDiv = document.getElementById('summaryArea');

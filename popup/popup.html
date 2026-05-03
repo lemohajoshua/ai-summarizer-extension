@@ -8,8 +8,16 @@
   <div class="container">
     <h2>AI Summarizer</h2>
     <div id="pageTitle"></div>
+
+    <div class="api-section">
+      <label for="apiKeyInput">OpenAI API Key:</label>
+      <input type="password" id="apiKeyInput" placeholder="sk-..." />
+      <button id="saveKeyBtn">Save Key</button>
+      <div id="keyStatus"></div>
+    </div>
+
     <button id="summarizeBtn">Summarize Page</button>
-    <div id="loading" class="hidden">Generating summary...</div>
+    <div id="loading" class="hidden">⏳ Generating summary...</div>
     <div id="summaryArea" class="summary-box"></div>
     <button id="clearBtn">Clear</button>
   </div>
