@@ -1,0 +1,52 @@
+body { 
+    width: 400px;
+    font-family: system-ui;
+    padding: 1rem;
+}
+.container {
+    display: flex;
+    flex-direction:
+    column; gap: 12px;
+}
+button {
+    padding: 8px;
+    cursor: pointer;
+    border: none;
+    background: #2563eb;
+    color: white;
+    border-radius: 6px;
+}
+button:hover {
+    background: #1d4ed8;
+}
+button:focus-visible {
+    outline: 2px solid #facc15;
+}
+.summary-box {
+    background: #f9fafb;
+    padding: 12px;
+    border-radius: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+}
+.hidden {
+    display: none;
+}
+.loader {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #2563eb;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+#pageTitle {
+    font-weight: bold;
+    color: #374151;
+}
