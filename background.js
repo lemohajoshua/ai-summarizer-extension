@@ -1,9 +1,14 @@
 let API_KEY = '';
 
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.get(['openai_api_key'], (result) => {
-    if (result.openai_api_key) API_KEY = result.openai_api_key;
-  });
+chrome.storage.sync.get(['openai_api_key'], (result) => {
+  if (result.openai_api_key) API_KEY = result.openai_api_key;
+});
+
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'sync' && changes.openai_api_key) {
+    API_KEY = changes.openai_api_key.newValue;
+    console.log('API key updated in background');
+  }
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -23,7 +28,7 @@ async function handleSummarize(content, url) {
   }
 
   if (!API_KEY) {
-    throw new Error('OpenAI API key not set. Please set it in extension options.');
+    throw new Error('OpenAI API key not set. Please enter your key in the extension popup and click Save.');
   }
 
   const prompt = `Summarize the following webpage content into bullet points. Include key insights and estimated reading time (based on word count). Format: 
